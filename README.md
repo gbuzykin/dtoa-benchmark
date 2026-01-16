@@ -5,6 +5,67 @@ This project is a complete rewrite of Milo Yip’s
 updated set of algorithms that reflect the current state of the art and a
 simplified workflow.
 
+Formatting library from [uxs](https://github.com/gbuzykin/uxs) is also added
+with the folowwing result:
+
+```
+Verifying double-conversion    ... OK. Length Avg = 22.420, Max = 25
+Verifying dragonbox            ...
+warning: expected 0.1 but got 1E-1
+warning: expected 0.12 but got 1.2E-1
+warning: expected 0.123 but got 1.23E-1
+warning: expected 0.1234 but got 1.234E-1
+warning: expected 1.2345 but got 1.2345E0
+OK. Length Avg = 22.027, Max = 24
+Verifying fmt                  ... OK. Length Avg = 22.440, Max = 24
+Verifying ostringstream        ...
+warning: expected 0.1 but got 0.10000000000000001
+warning: expected 1.2345 but got 1.2344999999999999
+OK. Length Avg = 22.935, Max = 24
+Verifying ryu                  ...
+warning: expected 0.1 but got 1E-1
+warning: expected 0.12 but got 1.2E-1
+warning: expected 0.123 but got 1.23E-1
+warning: expected 0.1234 but got 1.234E-1
+warning: expected 1.2345 but got 1.2345E0
+OK. Length Avg = 22.027, Max = 24
+Verifying schubfach            ...
+warning: expected 0.1 but got 1.e-01
+warning: expected 0.12 but got 1.2e-01
+warning: expected 0.123 but got 1.23e-01
+warning: expected 0.1234 but got 1.234e-01
+warning: expected 1.2345 but got 1.2345e+00
+OK. Length Avg = 22.561, Max = 24
+Verifying sprintf              ...
+warning: expected 0.1 but got 0.10000000000000001
+warning: expected 1.2345 but got 1.2344999999999999
+OK. Length Avg = 22.935, Max = 24
+Verifying to_chars             ... OK. Length Avg = 22.421, Max = 24
+Verifying uxs                  ... OK. Length Avg = 22.437, Max = 24
+Verifying xjb64                ... OK. Length Avg = 22.444, Max = 24
+Verifying yy                   ... OK. Length Avg = 21.974, Max = 25
+Verifying zmij                 ...
+warning: expected 0.1 but got 1e-01
+warning: expected 0.12 but got 1.2e-01
+warning: expected 0.123 but got 1.23e-01
+warning: expected 0.1234 but got 1.234e-01
+warning: expected 1.2345 but got 1.2345e+00
+OK. Length Avg = 22.561, Max = 24
+Benchmarking randomdigit double-conversion    ... [  36.844ns,   65.787ns]
+Benchmarking randomdigit dragonbox            ... [  15.131ns,   19.361ns]
+Benchmarking randomdigit fmt                  ... [  14.565ns,   21.703ns]
+Benchmarking randomdigit null                 ... [   0.945ns,    0.947ns]
+Benchmarking randomdigit ostringstream        ... [ 396.638ns,  456.430ns]
+Benchmarking randomdigit ryu                  ... [  23.737ns,   36.456ns]
+Benchmarking randomdigit schubfach            ... [  17.563ns,   27.946ns]
+Benchmarking randomdigit sprintf              ... [ 260.579ns,  303.910ns]
+Benchmarking randomdigit to_chars             ... [  30.034ns,   42.044ns]
+Benchmarking randomdigit uxs                  ... [  31.207ns,   37.085ns]
+Benchmarking randomdigit xjb64                ... [  10.378ns,   10.446ns]
+Benchmarking randomdigit yy                   ... [  10.360ns,   13.164ns]
+Benchmarking randomdigit zmij                 ... [  10.972ns,   11.321ns]
+```
+
 ## Introduction
 
 This benchmark evaluates the performance of converting double-precision
