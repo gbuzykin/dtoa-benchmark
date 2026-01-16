@@ -6,7 +6,7 @@ updated set of algorithms that reflect the current state of the art and a
 simplified workflow.
 
 Formatting library from [uxs](https://github.com/gbuzykin/uxs) is also added
-with the folowwing result:
+with the folowwing result (core-i7 14700 linux clang19.1):
 
 ```
 Verifying double-conversion    ... OK. Length Avg = 22.420, Max = 25
