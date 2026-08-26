@@ -12,60 +12,41 @@ endif()
 
 project(DTOA_BENCHMARK C CXX)
 
-include(ExternalProject)
+include(FetchContent)
+include(GNUInstallDirs)
 
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 20)
-endif()
+option(OPTION_USE_LIBCPP "Use LibC++" OFF)
+
+set(CMAKE_CXX_STANDARD
+    20
+    CACHE STRING "Default C++ standard")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 message("Using C++${CMAKE_CXX_STANDARD} standard")
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 if(UNIX)
   set(CMAKE_SKIP_RPATH OFF)
   set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-  set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/../lib")
+  set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
 endif()
 
-foreach(
-  var_name
-  CMAKE_C_COMPILER
-  CMAKE_C_FLAGS
-  CMAKE_CXX_COMPILER
-  CMAKE_CXX_STANDARD
-  CMAKE_CXX_FLAGS
-  CMAKE_SHARED_LINKER_FLAGS
-  CMAKE_BUILD_TYPE)
-  if(DEFINED ${var_name})
-    list(APPEND EXT_PROJECT_CMAKE_ARGS "-D${var_name}=${${var_name}}")
-  endif()
-endforeach()
-
-set(UXS_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/uxs)
-set(UXS_INCLUDE_DIR ${UXS_INSTALL_DIR}/include)
-set(UXS_LIBRARY_NAME $<IF:$<BOOL:${WIN32}>,uxs.lib,libuxs.so>)
-set(UXS_LIBRARY ${UXS_INSTALL_DIR}/lib/${UXS_LIBRARY_NAME})
-ExternalProject_Add(
-  uxs
-  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/uxs
-  PREFIX ${CMAKE_CURRENT_BINARY_DIR}/uxs
-  BUILD_BYPRODUCTS ${UXS_LIBRARY}
-  CMAKE_CACHE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${UXS_INSTALL_DIR}
-  CMAKE_ARGS -DUSE_ZLIB=Off #
-             -DUSE_LIBZIP=Off #
-             ${EXT_PROJECT_CMAKE_ARGS})
-
-if(WIN32)
-  install(
-    DIRECTORY ${UXS_INSTALL_DIR}/bin
-    DESTINATION .
-    COMPONENT binary)
-elseif(UNIX)
-  install(
-    DIRECTORY ${UXS_INSTALL_DIR}/lib
-    DESTINATION .
-    COMPONENT library)
+if(NOT MSVC
+   AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+   AND OPTION_USE_LIBCPP)
+  message("Using libc++")
+  add_compile_options(-stdlib=libc++)
+  add_link_options(-stdlib=libc++)
 endif()
+
+block()
+set(UXS_USE_ZLIB OFF)
+set(UXS_USE_LIBZIP OFF)
+set(UXS_DO_INSTALL_SDK OFF)
+FetchContent_Declare(uxs SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/uxs)
+FetchContent_MakeAvailable(uxs)
+endblock()
 
 add_executable(
   dtoa-benchmark
@@ -100,22 +81,20 @@ add_executable(
   src/double-conversion/fixed-dtoa.cc
   src/double-conversion/strtod.cc
   src/dragonbox/dragonbox_to_chars.cpp # 2 Aug 2025: 6c7c925
-  src/fmt/src/format.cc # 2 Aug 2025: 35dcc582
+  src/fmt/src/format.cc
   src/ryu/d2s.c
   src/schubfach/schubfach.cc
   src/xjb/xjb64.cpp
   src/yy/yy_double.c
   src/zmij/zmij.cc)
 
-add_dependencies(dtoa-benchmark uxs)
-
 target_compile_options(
   dtoa-benchmark PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/Zc:__cplusplus /utf-8>)
-target_include_directories(dtoa-benchmark PRIVATE src src/fmt/include
-                                                  ${UXS_INCLUDE_DIR})
-target_link_libraries(dtoa-benchmark PRIVATE ${UXS_LIBRARY})
+target_include_directories(dtoa-benchmark PRIVATE src src/fmt/include)
+target_link_libraries(dtoa-benchmark PRIVATE UXS::UXS)
 
-install(TARGETS dtoa-benchmark RUNTIME DESTINATION bin COMPONENT binary)
+install(TARGETS dtoa-benchmark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                                       COMPONENT binary)
 
 if(APPLE)
   execute_process(COMMAND sysctl -n machdep.cpu.brand_string
