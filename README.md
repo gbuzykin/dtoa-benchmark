@@ -60,7 +60,7 @@ The following results were measured on Intel(R) Core(TM) i7-14700 linux clang 22
 
 ```
 Verifying double-conversion    ... OK. Length Avg = 22.420, Max = 25
-Verifying dragonbox            ... 
+Verifying dragonbox            ...
 warning: expected 0.1 but got 1E-1
 warning: expected 0.12 but got 1.2E-1
 warning: expected 0.123 but got 1.23E-1
@@ -68,25 +68,25 @@ warning: expected 0.1234 but got 1.234E-1
 warning: expected 1.2345 but got 1.2345E0
 OK. Length Avg = 22.027, Max = 24
 Verifying fmt                  ... OK. Length Avg = 22.440, Max = 24
-Verifying ostringstream        ... 
+Verifying ostringstream        ...
 warning: expected 0.1 but got 0.10000000000000001
 warning: expected 1.2345 but got 1.2344999999999999
 OK. Length Avg = 22.935, Max = 24
-Verifying ryu                  ... 
+Verifying ryu                  ...
 warning: expected 0.1 but got 1E-1
 warning: expected 0.12 but got 1.2E-1
 warning: expected 0.123 but got 1.23E-1
 warning: expected 0.1234 but got 1.234E-1
 warning: expected 1.2345 but got 1.2345E0
 OK. Length Avg = 22.027, Max = 24
-Verifying schubfach            ... 
+Verifying schubfach            ...
 warning: expected 0.1 but got 1.e-01
 warning: expected 0.12 but got 1.2e-01
 warning: expected 0.123 but got 1.23e-01
 warning: expected 0.1234 but got 1.234e-01
 warning: expected 1.2345 but got 1.2345e+00
 OK. Length Avg = 22.561, Max = 24
-Verifying sprintf              ... 
+Verifying sprintf              ...
 warning: expected 0.1 but got 0.10000000000000001
 warning: expected 1.2345 but got 1.2344999999999999
 OK. Length Avg = 22.935, Max = 24
@@ -94,26 +94,26 @@ Verifying to_chars             ... OK. Length Avg = 22.421, Max = 24
 Verifying uxs                  ... OK. Length Avg = 22.437, Max = 24
 Verifying xjb64                ... OK. Length Avg = 22.444, Max = 24
 Verifying yy                   ... OK. Length Avg = 21.974, Max = 25
-Verifying zmij                 ... 
+Verifying zmij                 ...
 warning: expected 0.1 but got 1e-01
 warning: expected 0.12 but got 1.2e-01
 warning: expected 0.123 but got 1.23e-01
 warning: expected 0.1234 but got 1.234e-01
 warning: expected 1.2345 but got 1.2345e+00
 OK. Length Avg = 22.561, Max = 24
-Benchmarking randomdigit double-conversion    ... [  36.363ns,   63.982ns]
-Benchmarking randomdigit dragonbox            ... [  14.956ns,   18.910ns]
-Benchmarking randomdigit fmt                  ... [  14.053ns,   21.485ns]
-Benchmarking randomdigit null                 ... [   0.928ns,    0.934ns]
-Benchmarking randomdigit ostringstream        ... [ 367.011ns,  405.353ns]
-Benchmarking randomdigit ryu                  ... [  23.340ns,   35.454ns]
-Benchmarking randomdigit schubfach            ... [  17.560ns,   27.500ns]
-Benchmarking randomdigit sprintf              ... [ 254.717ns,  290.835ns]
-Benchmarking randomdigit to_chars             ... [  25.609ns,   38.602ns]
-Benchmarking randomdigit uxs                  ... [  29.597ns,   33.770ns]
-Benchmarking randomdigit xjb64                ... [   9.698ns,    9.937ns]
-Benchmarking randomdigit yy                   ... [  10.331ns,   13.046ns]
-Benchmarking randomdigit zmij                 ... [  10.619ns,   10.846ns]
+Benchmarking randomdigit double-conversion    ... [  43.336ns,   62.811ns]
+Benchmarking randomdigit dragonbox            ... [  15.021ns,   18.914ns]
+Benchmarking randomdigit fmt                  ... [  14.098ns,   21.681ns]
+Benchmarking randomdigit null                 ... [   0.928ns,    0.929ns]
+Benchmarking randomdigit ostringstream        ... [ 365.801ns,  402.952ns]
+Benchmarking randomdigit ryu                  ... [  23.205ns,   35.558ns]
+Benchmarking randomdigit schubfach            ... [  17.503ns,   27.473ns]
+Benchmarking randomdigit sprintf              ... [ 255.083ns,  291.311ns]
+Benchmarking randomdigit to_chars             ... [  25.624ns,   38.630ns]
+Benchmarking randomdigit uxs                  ... [  29.205ns,   33.780ns]
+Benchmarking randomdigit xjb64                ... [   9.711ns,    9.939ns]
+Benchmarking randomdigit yy                   ... [  10.277ns,   13.107ns]
+Benchmarking randomdigit zmij                 ... [  10.846ns,   11.131ns]
 ```
 
 ### Notes
@@ -130,14 +130,14 @@ Benchmarking randomdigit zmij                 ... [  10.619ns,   10.846ns]
 | [asteria](https://github.com/lhmouse/asteria) | `rocket::ascii_numput::put_DD` |
 | [double-conversion](https://github.com/google/double-conversion) | `EcmaScriptConverter::ToShortest` which implements Grisu3 with bignum fallback |
 | [dragonbox](https://github.com/jk-jeon/dragonbox) | `jkj::dragonbox::to_chars` with full tables |
-| [fmt](https://github.com/fmtlib/fmt) e27cc20bd9 Sun Aug 23 19:31:28 2026 +0300 | `fmt::format_to` with compile-time format strings (uses Dragonbox). |
+| [fmt](https://github.com/fmtlib/fmt) 0fc31633e7 Sun Oct 18 09:14:35 2026 -0500 | `fmt::format_to` with compile-time format strings (uses Dragonbox). |
 | null | no-op implementation |
 | [ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream.html) | `std::ostringstream` with `setprecision(17)` |
 | [ryu](https://github.com/ulfjack/ryu) | `d2s_buffered` |
 | [schubfach](https://github.com/vitaut/schubfach) | C++ Schubfach implementation |
 | [sprintf](https://en.cppreference.com/w/c/io/fprintf.html) | C `sprintf("%.17g", value)` |
 | [to_chars](https://en.cppreference.com/w/cpp/utility/to_chars.html) from libc++ | `std::to_chars` |
-| [uxs](https://github.com/gbuzykin/uxs) 67536682cc Wed Aug 26 12:17:45 2026 +0300 | `uxs::to_chars` |
+| [uxs](https://github.com/gbuzykin/uxs) 21b6b9638c Tue Oct 20 14:34:22 2026 +0300 | `uxs::to_chars` |
 | [zmij](https://github.com/vitaut/zmij) | `zmij::write`. |
 
 ### Notes
