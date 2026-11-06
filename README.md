@@ -1,22 +1,21 @@
 # dtoa benchmark
 
-This project is a complete rewrite of Milo Yip’s
-[dtoa-benchmark](https://github.com/miloyip/dtoa-benchmark), featuring an updated set of algorithms
-that reflect the current state of the art and a simplified workflow.
+This project is a complete rewrite of Milo Yip’s [dtoa-benchmark](https://github.com/miloyip/dtoa-benchmark), featuring
+an updated set of algorithms that reflect the current state of the art and a simplified workflow.
 
 Formatting library from [uxs](https://github.com/gbuzykin/uxs) is also added.
 
 ## Introduction
 
-This benchmark evaluates the performance of converting double-precision IEEE-754 floating-point
-values (`double`) to ASCII strings.  The function signature is:
+This benchmark evaluates the performance of converting double-precision IEEE-754 floating-point values (`double`) to
+ASCII strings. The function signature is:
 
 ```cpp
 void dtoa(double value, char* buffer);
 ```
 
-The resulting string **must** be round-trip convertible: it should parse back to the original value
-**exactly** via a correct implementation of `strtod`.
+The resulting string **must** be round-trip convertible: it should parse back to the original value **exactly** via a
+correct implementation of `strtod`.
 
 Note: `dtoa` is *not* a standard C or C++ function.
 
@@ -36,14 +35,17 @@ The benchmark consists of two phases:
      * Reduce precision to 1–17 decimal digits in the significand.
      * Convert each value to an ASCII string.
 
-   Each digit group is executed 10 times.  
-   For each configuration, 10 trials are run and the **minimum** elapsed time is recorded.
+   Each digit group is executed 10 times. For each configuration, 10 trials are run and the **minimum** elapsed time is
+   recorded.
 
 ## Build and Run
 
 ```bash
-cmake .
-make run-benchmark
+$ git clone git://github.com/gbuzykin/dtoa-benchmark.git
+$ cmake -S . -B build
+$ cmake --build build
+$ cmake --install build --prefix install
+$ ./install/bin/dtoa-benchmark
 ```
 
 Results are written in CSV format to:
@@ -101,27 +103,26 @@ warning: expected 0.123 but got 1.23e-01
 warning: expected 0.1234 but got 1.234e-01
 warning: expected 1.2345 but got 1.2345e+00
 OK. Length Avg = 22.561, Max = 24
-Benchmarking randomdigit double-conversion    ... [  43.336ns,   62.811ns]
-Benchmarking randomdigit dragonbox            ... [  15.021ns,   18.914ns]
-Benchmarking randomdigit fmt                  ... [  14.098ns,   21.681ns]
-Benchmarking randomdigit null                 ... [   0.928ns,    0.929ns]
-Benchmarking randomdigit ostringstream        ... [ 365.801ns,  402.952ns]
-Benchmarking randomdigit ryu                  ... [  23.205ns,   35.558ns]
-Benchmarking randomdigit schubfach            ... [  17.503ns,   27.473ns]
-Benchmarking randomdigit sprintf              ... [ 255.083ns,  291.311ns]
-Benchmarking randomdigit to_chars             ... [  25.624ns,   38.630ns]
-Benchmarking randomdigit uxs                  ... [  29.205ns,   33.780ns]
-Benchmarking randomdigit xjb64                ... [   9.711ns,    9.939ns]
-Benchmarking randomdigit yy                   ... [  10.277ns,   13.107ns]
-Benchmarking randomdigit zmij                 ... [  10.846ns,   11.131ns]
+Benchmarking randomdigit double-conversion    ... [  43.115ns,   63.401ns]
+Benchmarking randomdigit dragonbox            ... [  14.675ns,   18.916ns]
+Benchmarking randomdigit fmt                  ... [  13.851ns,   21.151ns]
+Benchmarking randomdigit null                 ... [   0.742ns,    0.742ns]
+Benchmarking randomdigit ostringstream        ... [ 365.536ns,  402.658ns]
+Benchmarking randomdigit ryu                  ... [  23.317ns,   35.462ns]
+Benchmarking randomdigit schubfach            ... [  17.454ns,   27.433ns]
+Benchmarking randomdigit sprintf              ... [ 254.160ns,  290.812ns]
+Benchmarking randomdigit to_chars             ... [  25.543ns,   38.376ns]
+Benchmarking randomdigit uxs                  ... [  29.342ns,   33.869ns]
+Benchmarking randomdigit xjb64                ... [   9.692ns,    9.936ns]
+Benchmarking randomdigit yy                   ... [  10.293ns,   13.070ns]
+Benchmarking randomdigit zmij                 ... [  11.090ns,   11.191ns]
 ```
 
 ### Notes
 
 * `null` performs no conversion and measures loop + call overhead.
-* `sprintf` and `ostringstream` do **not** generate shortest representations (e.g.  `0.1` →
-  `0.10000000000000001`).
-* `ryu`, `dragonbox`, and `schubfach` always emit exponential notation (e.g.  `0.1` → `1E-1`).
+* `sprintf` and `ostringstream` do **not** generate shortest representations (e.g. `0.1` → `0.10000000000000001`).
+* `ryu`, `dragonbox`, and `schubfach` always emit exponential notation (e.g. `0.1` → `1E-1`).
 
 ## Methods
 
@@ -130,15 +131,15 @@ Benchmarking randomdigit zmij                 ... [  10.846ns,   11.131ns]
 | [asteria](https://github.com/lhmouse/asteria) | `rocket::ascii_numput::put_DD` |
 | [double-conversion](https://github.com/google/double-conversion) | `EcmaScriptConverter::ToShortest` which implements Grisu3 with bignum fallback |
 | [dragonbox](https://github.com/jk-jeon/dragonbox) | `jkj::dragonbox::to_chars` with full tables |
-| [fmt](https://github.com/fmtlib/fmt) 0fc31633e7 Sun Oct 18 09:14:35 2026 -0500 | `fmt::format_to` with compile-time format strings (uses Dragonbox). |
 | null | no-op implementation |
 | [ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream.html) | `std::ostringstream` with `setprecision(17)` |
 | [ryu](https://github.com/ulfjack/ryu) | `d2s_buffered` |
 | [schubfach](https://github.com/vitaut/schubfach) | C++ Schubfach implementation |
 | [sprintf](https://en.cppreference.com/w/c/io/fprintf.html) | C `sprintf("%.17g", value)` |
-| [to_chars](https://en.cppreference.com/w/cpp/utility/to_chars.html) from libc++ | `std::to_chars` |
-| [uxs](https://github.com/gbuzykin/uxs) 21b6b9638c Tue Oct 20 14:34:22 2026 +0300 | `uxs::to_chars` |
-| [zmij](https://github.com/vitaut/zmij) | `zmij::write`. |
+| [zmij](https://github.com/vitaut/zmij) | `zmij::write` |
+| [fmt](https://github.com/fmtlib/fmt) 4ed3535092 Sun Nov 1 22:40:37 2026 +0530 | `fmt::format_to` with compile-time format strings (uses Dragonbox) |
+| [to_chars](https://en.cppreference.com/w/cpp/utility/to_chars.html) | `std::to_chars` using libc++ |
+| [uxs](https://github.com/gbuzykin/uxs) 61b12d0d28 Tue Nov 3 10:05:55 2026 +0300 | `uxs::to_chars` |
 
 ### Notes
 
@@ -146,12 +147,10 @@ Benchmarking randomdigit zmij                 ... [  10.846ns,   11.131ns]
 
 ## Why is fast `dtoa` important?
 
-Floating-point formatting is ubiquitous in text output.  Standard facilities such as `sprintf` and
-`std::stringstream` are often slow.  This benchmark originated from performance work in
-[RapidJSON](https://github.com/miloyip/rapidjson/).
+Floating-point formatting is ubiquitous in text output. Standard facilities such as `sprintf` and `std::stringstream`
+are often slow. This benchmark originated from performance work in [RapidJSON](https://github.com/miloyip/rapidjson/).
 
 ## See Also
 
 * [Faster double-to-string conversion](https://vitaut.net/posts/2025/faster-dtoa/)
-* [The smallest state-of-the-art double-to-string implementation](
-  https://vitaut.net/posts/2025/smallest-dtoa/)
+* [The smallest state-of-the-art double-to-string implementation]( https://vitaut.net/posts/2025/smallest-dtoa/)

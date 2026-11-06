@@ -43,7 +43,8 @@ endif()
 block()
 set(UXS_USE_ZLIB OFF)
 set(UXS_USE_LIBZIP OFF)
-set(UXS_DO_INSTALL_SDK OFF)
+set(UXS_BUILD_STATIC_ONLY ON)
+set(UXS_DO_INSTALL OFF)
 FetchContent_Declare(uxs SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/uxs)
 FetchContent_MakeAvailable(uxs)
 endblock()
@@ -91,7 +92,7 @@ add_executable(
 target_compile_options(
   dtoa-benchmark PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/Zc:__cplusplus /utf-8>)
 target_include_directories(dtoa-benchmark PRIVATE src src/fmt/include)
-target_link_libraries(dtoa-benchmark PRIVATE UXS::UXS)
+target_link_libraries(dtoa-benchmark PRIVATE UXS::UXS-static)
 
 install(TARGETS dtoa-benchmark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                                        COMPONENT binary)

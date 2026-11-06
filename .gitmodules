@@ -3,4 +3,4 @@
 	url = https://github.com/fmtlib/fmt.git
 [submodule "src/uxs"]
 	path = src/uxs
-	url = ../uxs.git
+	url = https://github.com/gbuzykin/uxs.git
